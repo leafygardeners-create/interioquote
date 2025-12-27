@@ -9,9 +9,10 @@
     *   Cities / Locations
     *   Materials & Finishes
     *   Hardware
-*   **Scope Logic**
-    *   Room Templates (Default items per room)
-    *   Item Assemblies (What makes up a Wardrobe?)
+*   **Scope Engine**
+    *   **Scope Groups** (TV Unit, Wardrobe, Kitchen Base)
+    *   **Sub-Element Library** (Carcass, Shutter, Drawer)
+    *   **Construction Rules** (Logic & Constraints)
 *   **Pricing**
     *   Rate Cards (Base Rates)
     *   Margins & Tax
@@ -37,24 +38,39 @@
 
 ---
 
-## Screen 2: Item Assembly Builder (The Logic)
+## Screen 2: Scope & Assembly Builder (The Logic Core)
 
-**Context:** Defining what "Wardrobe (Standard)" actually means.
+**Context:** Defining hierarchical assemblies. "How do we build a TV Unit?"
 
-**Header:** Edit Assembly: "Wardrobe_Sliding_2Door"
-**Rules:** [ If Height > 7ft, Add Loft ] [ If Width > 4ft, Add Divider ]
+**Selector:** [ Living Room ] > [ TV Unit (LIV_TV_UNIT) ]
 
-**BOM (Bill of Materials) Definition:**
-| Component | Formula | Material Ref | Qty Formula |
+**1. Sub-Element Configuration:**
+| Sub-Element | Unit Logic | Material Default | Hardware Link |
 | :--- | :--- | :--- | :--- |
-| **Carcass** | Internal Body | @Ref_Ply_18mm | (H * W * D) * 2.5 |
-| **Shutter** | External Door | @Ref_Ply_18mm | (H * W) |
-| **Finish** | Surface | @Ref_Lam_1mm | (H * W) * 2 |
-| **Hinges** | Hardware | @Ref_Hinge_Soft | RoundUp(H / 2) * 2 |
+| **Base Cabinet** | `User_Length * 1.5` (rft) | @Def_Ply_BWR | @Hinge_Soft |
+| **Wall Panel** | `User_TV_Size * 2.0` (sqft)| @Def_Lam_1mm | - |
+| **Open Shelf** | `User_Length * 0.5` (rft) | @Def_Lam_1mm | - |
+| **Glass Shutter**| `Manual_Input` (sqft) | @Glass_Tough | @Gas_Lift |
 
-**Test Preview:**
-*   *Input:* H=7, W=4, D=2.
-*   *Output Cost:* ₹35,400.
+**2. Quantity Logic Editor (Code/Formula Block):**
+```javascript
+// Variable Definitions
+let base_depth = 450; // mm
+let wall_depth = 300; // mm
+
+// Logic
+if (User.TV_Size > 55) {
+  Recommend_Panel_Width = 6; // feet
+} else {
+  Recommend_Panel_Width = 4; // feet
+}
+```
+
+**3. Finish Options Mapping:**
+*   **Laminate:** [x] Enabled (Base Rate)
+*   **Membrane:** [x] Enabled (Rate * 1.3)
+*   **Veneer:** [ ] Disabled for this unit
+*   **PU:** [x] Enabled (Rate * 2.0)
 
 ---
 

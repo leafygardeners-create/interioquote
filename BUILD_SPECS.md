@@ -4,8 +4,52 @@ This document translates the UX designs into technical requirements for the engi
 
 ## Global Dependencies
 *   **Pricing Engine:** A deterministic calculator based on `(Qty * Rate) + Margin`.
-*   **Room Database:** Standard dimensions and default scopes for typical Indian rooms (Master Bed, Kids Bed, Kitchen, Living).
-*   **OCR / Vision API:** Integration (e.g., Google Vision or similar) to parse floor plan images/PDFs.
+*   **Scope Engine:** Interprets the definitions in `SCOPE_DEFINITIONS.md`.
+    *   Logic: `Unit -> Sub-elements -> Finish -> Hardware`.
+*   **Room Database:** Standard dimensions and default scopes for typical Indian rooms.
+*   **OCR / Vision API:** Integration to parse floor plan images/PDFs.
+
+---
+
+## Data Models (Backend)
+
+**1. Scope Definition Model**
+```json
+{
+  "scope_id": "LIV_TV_UNIT",
+  "name": "TV Unit",
+  "sub_elements": [
+    {
+      "id": "base_cab",
+      "name": "Base Cabinet",
+      "unit_type": "rft",
+      "qty_formula": "room_width * 0.8",
+      "allowed_finishes": ["lam", "veneer", "pu"]
+    },
+    {
+      "id": "wall_panel",
+      "name": "Wall Panel",
+      "unit_type": "sqft",
+      "qty_formula": "tv_size_factor * room_height"
+    }
+  ],
+  "hardware_rules": {
+    "hinges_per_door": 2,
+    "channel_type": "soft_close"
+  }
+}
+```
+
+**2. Rate Card Model**
+```json
+{
+  "item_id": "MAT_PLY_BWP",
+  "base_rate": 110,
+  "labor_rate": 45,
+  "margin_percent": 0.15,
+  "unit": "sqft"
+}
+```
 
 ---
 
@@ -33,8 +77,8 @@ This document translates the UX designs into technical requirements for the engi
 
 ## Screen 3: Scope Preview (Per Room)
 *   **Data Required:**
-    *   `DefaultScopeRules`: Mapping of Room Type -> List of Items (e.g., Bedroom -> Wardrobe, Bed, Side Table).
-    *   `ItemMetadata`: Definitions for tooltips (e.g., "Wardrobe" description).
+    *   `DefaultScopeRules`: Mapping of Room Type -> List of Scope Groups (e.g., Bedroom -> Wardrobe, Bed).
+    *   `ItemMetadata`: Definitions for tooltips.
 *   **User Actions:**
     *   `toggleItem(itemId, boolean)`
 *   **Outputs:**
@@ -42,7 +86,7 @@ This document translates the UX designs into technical requirements for the engi
 
 ## Screen 4: Cost Drivers (Global Configuration)
 *   **Data Required:**
-    *   `MaterialOptions`: List [Commercial, BWP] with `priceMultiplier`.
+    *   `MaterialOptions`: List [Commercial, BWP].
     *   `FinishOptions`: List [Laminate, Acrylic, Veneer] with `priceMultiplier`.
     *   `HardwareOptions`: List [Indian, International].
 *   **User Actions:**
@@ -62,19 +106,20 @@ This document translates the UX designs into technical requirements for the engi
 *   **User Actions:**
     *   `expandRoom(id)`
     *   `expandItem(id)`
+        *   *Drill-down:* Show Sub-elements (Carcass cost, Shutter cost).
     *   `downloadPDF()`
     *   `saveQuote()`
 *   **Outputs:**
     *   Generated PDF Document.
-    *   User Account creation (optional/lazy).
 
-## Screen 6: Admin Panel (Rate Card)
+## Screen 6: Admin Panel (Rate Card & Scope)
 *   **Data Required:**
     *   `MasterRateTable`: The full database of raw material costs.
+    *   `ScopeDefinitions`: The JSON logic for assemblies.
 *   **User Actions:**
     *   `updateCell(id, column, newValue)`
-    *   `bulkImport(csv)`
+    *   `editScopeAssembly(json)`
     *   `publishVersion()`
 *   **System Logic:**
-    *   *Audit Log:* Record `timestamp`, `user`, `oldVal`, `newVal` for every change.
-    *   *Validation:* Prevent negative numbers or zero-cost items (unless explicitly allowed).
+    *   *Audit Log:* Record all changes.
+    *   *Validation:* Ensure formulas are valid JS/Math expressions.
