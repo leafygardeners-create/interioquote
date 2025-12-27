@@ -1,0 +1,50 @@
+[
+  {
+    "scope_id": "LIV_TV_UNIT",
+    "name": "TV Unit",
+    "room_type": "Living",
+    "default_active": true,
+    "sub_elements": [
+      {
+        "id": "base_cab",
+        "name": "Base Cabinet",
+        "unit_type": "rft",
+        "qty_formula": "room_width * 0.6",
+        "default_material_id": "MAT_PLY_BWP",
+        "allowed_finishes": ["FIN_LAM_1MM", "FIN_PU"]
+      },
+      {
+        "id": "wall_panel",
+        "name": "Wall Paneling",
+        "unit_type": "sqft",
+        "qty_formula": "(room_width * 0.6) * 6",
+        "default_material_id": "MAT_PLY_MR",
+        "allowed_finishes": ["FIN_LAM_1MM", "FIN_PU"]
+      }
+    ]
+  },
+  {
+    "scope_id": "BED_WARDROBE",
+    "name": "Wardrobe",
+    "room_type": "Bedroom",
+    "default_active": true,
+    "sub_elements": [
+      {
+        "id": "carcass",
+        "name": "Internal Body",
+        "unit_type": "sqft",
+        "qty_formula": "(room_width * 0.5) * room_height * 2.5",
+        "default_material_id": "MAT_PLY_MR",
+        "allowed_finishes": ["FIN_LAM_INT_WHITE"]
+      },
+      {
+        "id": "shutter",
+        "name": "Shutters",
+        "unit_type": "sqft",
+        "qty_formula": "(room_width * 0.5) * room_height",
+        "default_material_id": "MAT_PLY_MR",
+        "allowed_finishes": ["FIN_LAM_1MM", "FIN_ACRYLIC"]
+      }
+    ]
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "item_id": "MAT_PLY_BWP",
+    "name": "BWP Plywood (18mm)",
+    "category": "Material",
+    "unit": "sqft",
+    "base_rate": 110,
+    "labor_rate": 45,
+    "margin_percent": 0.15
+  },
+  {
+    "item_id": "MAT_PLY_MR",
+    "name": "MR Plywood (18mm)",
+    "category": "Material",
+    "unit": "sqft",
+    "base_rate": 85,
+    "labor_rate": 40,
+    "margin_percent": 0.15
+  },
+  {
+    "item_id": "FIN_LAM_1MM",
+    "name": "Laminate (1mm)",
+    "category": "Finish",
+    "unit": "sqft",
+    "base_rate": 40,
+    "labor_rate": 25,
+    "margin_percent": 0.15
+  },
+  {
+    "item_id": "FIN_ACRYLIC",
+    "name": "Acrylic Sheet",
+    "category": "Finish",
+    "unit": "sqft",
+    "base_rate": 120,
+    "labor_rate": 35,
+    "margin_percent": 0.20
+  },
+  {
+    "item_id": "FIN_PU",
+    "name": "PU Paint (Glossy)",
+    "category": "Finish",
+    "unit": "sqft",
+    "base_rate": 250,
+    "labor_rate": 50,
+    "margin_percent": 0.25
+  },
+  {
+    "item_id": "FIN_LAM_INT_WHITE",
+    "name": "Internal White Laminate",
+    "category": "Finish",
+    "unit": "sqft",
+    "base_rate": 20,
+    "labor_rate": 15,
+    "margin_percent": 0.15
+  }
+]
